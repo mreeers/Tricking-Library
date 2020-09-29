@@ -18,6 +18,13 @@ namespace TrickingLibrary.API.Controllers
             _env = env;
         }
 
+        [HttpGet]
+        public IActionResult GetVideo(string video)
+        {
+            using var fileStream = new FileStream(_env.WebRootPath, video);
+            return new FileStreamResult();
+        }
+
         [HttpPost]
         public async Task<IActionResult> UploadVideo(IFormFile video)
         {
@@ -30,7 +37,7 @@ namespace TrickingLibrary.API.Controllers
                 await video.CopyToAsync(fileStream);
             }
 
-            return Ok();
+            return Ok(fileName);
         }
     }
 }
