@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace TrickingLibrary.API.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/videos")]
     [ApiController]
     public class VideosController : ControllerBase
     {
@@ -18,11 +18,12 @@ namespace TrickingLibrary.API.Controllers
             _env = env;
         }
 
-        [HttpGet]
+        [HttpGet("{video}")]
         public IActionResult GetVideo(string video)
         {
-            using var fileStream = new FileStream(_env.WebRootPath, video);
-            return new FileStreamResult();
+            var mime = video.Split('.').Last();
+            var savePath = Path.Combine(_env.WebRootPath, video);
+            return new FileStreamResult(new FileStream(savePath, FileMode.Open, FileAccess.Read), "video/*");
         }
 
         [HttpPost]
