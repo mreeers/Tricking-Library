@@ -20,6 +20,7 @@
     export const actions = {
         async nuxtServerInit({commit, dispatch}) {
             const message = (await Axios.get("http://localhost:5000/api/home")).data;
+            console.log(message);
             commit("setMessage", message);
             await dispatch("tricks/fetchTricks")
         }

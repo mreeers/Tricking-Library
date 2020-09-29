@@ -1,55 +1,58 @@
 <template>
-  <v-row justify="center" align="center">
-    <v-col cols="12" sm="8" md="6">
-      <div class="text-center">
-        <logo />
-        <vuetify-logo />
-      </div>
+<div>
+  <v-file-input @change="handleFile" accept="video/*" />
+
+
       <div v-if="tricks">
         <p v-for="t in tricks">
           {{t.name}}
         </p>
       </div>
       <div>
-        <v-input label="Tricking Name" v-model="trickName"/>
+        <v-text-field label="Tricking Name" v-model="trickName"/>
+        <v-btn @click="saveTrick">Save Trick</v-btn>
       </div>
       {{message}}
       <v-btn @click="reset">Reset Message</v-btn>
       <v-btn @click="resetTricks">Reset Tricks</v-btn>
-    </v-col>
-  </v-row>
+</div>
 </template>
 
 <script>
-import Logo from '~/components/Logo.vue';
-import VuetifyLogo from '~/components/VuetifyLogo.vue';
-import Axios from "axios";
 import {mapState, mapActions, mapMutations} from 'vuex';
+import Axios from "axios";
 
 export default {
-  components: {
-    Logo,
-    VuetifyLogo
-  },
-  //data: () => ({
-  //  message: ""
-  //}),
+  data: () => ({
+    trickName: ""
+  }),
   computed: {
    ...mapState({
     message: state => state.message
    }),
    ...mapState('tricks', {
     tricks: state => state.tricks
-   }),
+   })
   },
   methods: {
     ...mapMutations(['reset']),
     ...mapMutations({
       resetTricks: 'reset'
     }),
-    ...mapActions('tricks', 'createTricks'),
+    ...mapActions('tricks', ['createTrick']),
     async saveTrick() {
-      await this.createTrick(this.trickName);
+      await this.createTrick({trick: {name: this.trickName}});
+      this.trickName = "";
+    },
+    async handleFile(file) {
+      if(!file)
+        return;
+
+      const form = new FormData();
+      form.append("video", file)
+
+      const result = await Axios.post("http://localhost:5000/api/videos", form);
+      console.log("result: ", result)
     }
 
   } 
