@@ -1,16 +1,26 @@
 const initState = () => ({
   uploadPromise: null,
-  active: false
+  active: false,
+  type: "",
+  step: 1,
 });
 
 export const state = initState
 
 export const mutations = {
-  toggleActivity(state, {status}) {
+  toggleActivity(state) {
     state.active = !state.active
+    if(!state.active) {
+      Object.assign(state, initState())
+    }
+  },
+  setType(state, {type}) {
+    state.type = type
+    state.step++
   },
   setTask(state, {uploadPromise}) {
     state.uploadPromise = uploadPromise
+    state.step++
   },
   reset(state){
     Object.assign(state, initState())
@@ -24,6 +34,6 @@ export const actions = {
   },
   async createTrick({commit, dispatch}, {trick}){
     await this.$axios.post("/api/tricks", trick)
-    await dispatch('fetchTricks')
+    await dispatch('tricks/fetchTricks')
   }
 };

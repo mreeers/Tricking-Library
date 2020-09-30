@@ -3,22 +3,11 @@
     <v-app-bar app dense>
       <v-toolbar-title>Tricking Library</v-toolbar-title>
       <v-spacer></v-spacer>
-      <v-menu left bottom>
-        <template v-slot:activator="{ on, attrs }">
-          <v-btn depressed @click="toggleActivity">
-            Upload
-          </v-btn>
-        </template>
-        <v-list>
-          <v-list-item @click="toggleActivity" >
-            <v-list-item-title>Trick</v-list-item-title>
-          </v-list-item>
-          <v-list-item>
-            <v-list-item-title>Submission</v-list-item-title>
-          </v-list-item>
-        </v-list>
-      </v-menu>
+      <v-btn depressed @click="toggleActivity">
+        Upload
+      </v-btn>
     </v-app-bar>
+    <video-upload />
     <v-main>
       <nuxt/>
     </v-main>
@@ -26,8 +15,13 @@
 </template>
 
 <script>
-  import {mapMutations} from 'vuex'
-  export default {
-    methods: mapMutations('videos', 'toggleActivity')
+import {mapMutations} from 'vuex'
+import VideoUpload from "~/components/video-upload";
+
+export default {
+  methods: mapMutations('videos', ['toggleActivity']),
+  components: {
+    VideoUpload
   }
+}
 </script>
