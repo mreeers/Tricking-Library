@@ -9,4 +9,8 @@
     <Folder Include="wwwroot\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\TrickingLibrary.Data\TrickingLibrary.Data.csproj" />
+  </ItemGroup>
+
 </Project>

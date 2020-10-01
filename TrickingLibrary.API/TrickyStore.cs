@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using TrickingLibrary.API.Models;
+using TrickingLibrary.Models;
 
 namespace TrickingLibrary.API
 {
