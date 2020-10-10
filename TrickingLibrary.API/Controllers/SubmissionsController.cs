@@ -9,7 +9,7 @@ using TrickingLibrary.Models;
 
 namespace TrickingLibrary.API.Controllers
 {
-    [Route("api/tricks")]
+    [Route("api/submissions")]
     [ApiController]
     public class SubmissionsController : ControllerBase
     {
@@ -24,19 +24,19 @@ namespace TrickingLibrary.API.Controllers
         public IEnumerable<Submission> All() => _context.Submissions.ToList();
 
         [HttpGet("{id}")]
-        public Submission Get(int id) => _context.Submissions.FirstOrDefault(x => x.Id == id);
+        public Submission Get(int id) => _context.Submissions.FirstOrDefault(x => x.Id.Equals(id));
         
         [HttpPost]
-        public async Task<IActionResult> Create([FromBody] Submission submission)
+        public async Task<Submission> Create([FromBody] Submission submission)
         {
             _context.Add(submission);
             await _context.SaveChangesAsync();
-            return Ok();
+            return submission;
         }
 
         // /api/tricks
         [HttpPut]
-        public async Task<IActionResult> Update([FromBody] Submission submission)
+        public async Task<Submission> Update([FromBody] Submission submission)
         {
             if(submission.Id == 0)
             {
@@ -44,7 +44,7 @@ namespace TrickingLibrary.API.Controllers
             }
             _context.Add(submission);
             await _context.SaveChangesAsync();
-            return Ok(); 
+            return submission; 
         }
 
         // /api/tricks/{id}

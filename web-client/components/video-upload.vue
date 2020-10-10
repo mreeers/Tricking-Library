@@ -1,6 +1,6 @@
 <template>
   <v-dialog :value="active" persistent >
-    <template v-slot:activator>
+    <template v-slot:activator="{on}">
       <v-btn depressed @click="toggleActivity">
         Upload
       </v-btn>
@@ -22,15 +22,15 @@
       <v-stepper-items>
         <v-stepper-content step="1">
           <div class="d-flex flex-column align-center" >
-            <v-btn class="my-2" @click="setType(uploadType.TRICK)">Trick</v-btn>
-            <v-btn class="my-2" @click="setType(uploadType.SUBMISSION)">Submission</v-btn>
+            <v-btn class="my-2" @click="setType({type: uploadType.TRICK})">Trick</v-btn>
+            <v-btn class="my-2" @click="setType({type: uploadType.SUBMISSION})">Submission</v-btn>
           </div>
         </v-stepper-content>
 
         <v-stepper-content step="2">
             <div>
               <v-text-field label="Tricking Name" v-model="trickName"></v-text-field>
-              <v-btn @click="saveTrick">Save Trick</v-btn>
+              <v-btn @click="incStep">Save Trick</v-btn>
             </div>
         </v-stepper-content>
 
@@ -43,13 +43,13 @@
         <v-stepper-content step="4">
           <div>
             <v-text-field label="Description" v-model="submission"></v-text-field>
-            <v-btn @click="saveTrick">Save Submission</v-btn>
+            <v-btn @click="incStep">Save Submission</v-btn>
           </div>
         </v-stepper-content>
 
         <v-stepper-content step="5">
           <div>
-            Success
+            <v-btn @click="save">Save</v-btn>
           </div>
         </v-stepper-content>
       </v-stepper-items>
@@ -72,28 +72,32 @@ export default {
     submission: "",
   }),
   computed: {
-    ...mapState('video-upload', ['uploadPromise', 'active', 'step']),
+    ...mapState('video-upload', ['uploadPromise', 'active', 'step', 'type']),
     uploadType() {
       return UPLOAD_TYPE;
     }
   },
   methods: {
-    ...mapMutations('video-upload', ['reset', 'toggleActivity', 'setType', 'type']),
+    ...mapMutations('video-upload', ['reset', 'incStep', 'toggleActivity', 'setType']),
     ...mapActions('video-upload', ['startVideoUpload', 'createTrick']),
     async handleFile(file) {
       if (!file) return;
       const form = new FormData();
-      form.append("video", file)
+      form.append("video", file);
       this.startVideoUpload({form});
     },
-    async saveTrick() {
+    async save() {
       if (!this.uploadPromise) {
-        console.log("uploadPromise is null")
+        console.log("uploadPromise is null");
         return;
       }
       const video = await this.uploadPromise;
-      await this.createTrick({trick: {name: this.trickName, video}});
-      this.trickName = ""
+      await this.createTrick({
+        trick: {name: this.trickName},
+        submission: {description: this.submission, video, trickId: 1}
+      });
+      this.trickName = "";
+      this.submission = "";
       this.reset();
     },
   }

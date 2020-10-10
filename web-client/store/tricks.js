@@ -1,6 +1,6 @@
 ﻿const initState = () => ({
   tricks: []
-})
+});
 
 export const state = initState
 
@@ -11,7 +11,7 @@ export const mutations = {
   reset(state){
     Object.assign(state, initState())
   }
-}
+};
 
 export const actions = {
   async fetchTricks({commit}){
@@ -19,4 +19,4 @@ export const actions = {
     commit("setTricks", {tricks})
   },
 
-}
+};

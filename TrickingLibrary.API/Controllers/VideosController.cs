@@ -8,7 +8,6 @@ using Microsoft.AspNetCore.Mvc;
 namespace TrickingLibrary.API.Controllers
 {
     [Route("api/videos")]
-    [ApiController]
     public class VideosController : ControllerBase
     {
         private readonly IWebHostEnvironment _env;
