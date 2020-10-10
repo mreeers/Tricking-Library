@@ -47,9 +47,6 @@ export const actions = {
       const createdTrick = await this.$axios.$post("/api/tricks", trick);
       submission.trickId = createdTrick.id;
     }
-    const createdSubmission = await this.$axios.$post("/api/submissions", trick);
-    await dispatch("tricks/fetchTricks", null, {root: true});
-    await dispatch("submissions/fetchSubmissions", null, {root: true});
-
+    await  this.$axios.$post("/api/submissions", submission)
   }
 };
