@@ -2,7 +2,7 @@
   tricks: []
 });
 
-export const state = initState
+export const state = initState;
 
 export const mutations = {
   setTricks(state, {tricks}) {
@@ -15,8 +15,11 @@ export const mutations = {
 
 export const actions = {
   async fetchTricks({commit}){
-    const tricks = await this.$axios.$get("http://localhost:5000/api/tricks");
+    const tricks = await this.$axios.$get("/api/tricks");
     commit("setTricks", {tricks})
   },
+  createTrick({state, commit, dispatch}, {form}){
+        return this.$axios.$post("/api/tricks", form)
+  }
 
 };
