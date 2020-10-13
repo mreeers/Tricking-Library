@@ -4,6 +4,14 @@
 
 export const state = initState;
 
+export  const getter = {
+  trickItems: state => state.tricks.map(x => ({
+    text: x.name,
+    value: x.id
+  }))
+  };
+
+
 export const mutations = {
   setTricks(state, {tricks}) {
     state.tricks = tricks

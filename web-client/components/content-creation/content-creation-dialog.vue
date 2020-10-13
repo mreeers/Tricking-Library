@@ -1,13 +1,27 @@
 <template>
   <v-dialog :value="active" persistent >
     <template v-slot:activator="{on}">
-      <v-btn depressed @click="toggleActivity">
-        Upload
-      </v-btn>
+      <v-menu offset-y>
+        <template v-slot:activator="{ on, attrs }">
+          <v-btn depressed v-bind="attrs" v-on="on">
+            Create
+          </v-btn>
+        </template>
+        <v-list>
+          <v-list-item v-for="(item, i) in menuItems" :key="`ccd-menu-${i}`" @click="activate({component: item.component})">
+            <v-list-item-title>{{ item.title }}</v-list-item-title>
+          </v-list-item>
+        </v-list>
+      </v-menu>
     </template>
-    <trick-steps />
+
+    <div v-if="component">
+      <component :is="component"></component>
+    </div>
+
+
     <div class="d-flex justify-center my-4">
-      <v-btn @click="toggleActivity">
+      <v-btn @click="reset">
         Close
       </v-btn>
     </div>
@@ -15,28 +29,24 @@
 </template>
 
 <script>
-  import {mapState, mapActions, mapMutations} from 'vuex';
-  import {UPLOAD_TYPE} from "../../data/enum";
+  import {mapState, mapMutations} from 'vuex';
   import TrickSteps from "./trick-steps";
+  import {SubmissionSteps} from "../../.nuxt/components";
 
   export default {
     name: "content-creation-dialog",
-    components: {TrickSteps},
-    data: () => ({
-      trickName: "",
-      submission: "",
-    }),
+    components: {TrickSteps, SubmissionSteps},
     computed: {
-      ...mapState('video-upload', ['uploadPromise', 'active', 'step', 'type']),
-      uploadType() {
-        return UPLOAD_TYPE;
+      ...mapState('video-upload', ['active', 'component']),
+      menuItems() {
+        return [
+          {component: TrickSteps, title: "Trick"},
+          {component: SubmissionSteps, title: "Submission"}
+        ]
       }
     },
-    methods: {
-      ...mapMutations('video-upload', ['reset', 'incStep', 'toggleActivity', 'setType']),
-      ...mapActions('video-upload', ['startVideoUpload', 'createTrick']),
-    },
-  }
+    methods: mapMutations('video-upload', ['reset', 'activate'])
+}
 </script>
 
 <style scoped>

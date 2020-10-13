@@ -43,14 +43,13 @@
 </template>
 
 <script>
-  import {mapState, mapActions, mapMutations} from 'vuex';
+  import {mapGetters, mapState, mapActions, mapMutations} from 'vuex';
 
   const initState = () =>({
     step: 1,
     form: {
       trickId: "",
       video: "",
-      submission: "",
       description: ""
     }
   });
@@ -59,20 +58,19 @@
     name: "submission-steps",
     data: initState,
     computed: {
-      ...mapState('video-upload', ['uploadPromise']),
-      ...mapState('tricks', ['tricks']),
-      trickItems() {
-        return this.tricks.map(x => ({
-          text: x.name,
-          value: x.id
-        }))
+      ...mapGetters('tricks', ['trickItems']),
+      ...mapState('video-upload', ['active'])
+    },
+    watch: {
+      'active': function (newValue) {
+        if(!newValue) {
+          Object.assign(this.$data, initState());
+        }
       }
     },
-
     methods: {
-      ...mapMutations('video-upload', ['reset', 'incStep', 'toggleActivity', 'setType']),
-      ...mapActions('video-upload', ['startVideoUpload', 'createTrick']),
-      ...mapActions('submissions', ['createSubmission']),
+      ...mapMutations('video-upload', ['hide']),
+      ...mapActions('video-upload', ['startVideoUpload', 'createSubmission']),
       async handleFile(file) {
         if (!file) return;
         const form = new FormData();
@@ -80,17 +78,9 @@
         this.startVideoUpload({form});
         this.step++;
       },
-      async save() {
-        if (!this.uploadPromise) {
-          console.log("uploadPromise is null");
-          return;
-        }
-        this.form.video = await this.uploadPromise;
-        await this.createTrick({
-          form: this.form
-        });
-        this.reset();
-        Object.assign(this.$data, initState());
+      save() {
+        this.createSubmission({form: this.form});
+        this.hide();
       },
     }
   }

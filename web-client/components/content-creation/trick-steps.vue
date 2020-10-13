@@ -9,7 +9,7 @@
       <v-stepper-items>
         <v-stepper-content step="1">
           <div>
-            <v-text-field label="Tricking Name" v-model="trickName"></v-text-field>
+            <v-text-field label="Tricking Name" v-model="form.name"></v-text-field>
             <v-btn @click="step++">Next</v-btn>
           </div>
         </v-stepper-content>
@@ -23,18 +23,26 @@
 </template>
 
 <script>
-  import {mapActions, mapMutations} from 'vuex';
+  import {mapActions, mapMutations, mapState} from 'vuex';
 
   const initState = () => ({
     step: 1,
       form: {
-      trickName: "",
+        name: "",
     }
   });
 
   export default {
     name: "trick-steps",
-    data: initState(),
+    data: initState,
+    computed: mapState('video-upload', ['active']),
+    watch: {
+      'active': function (newValue) {
+        if(!newValue) {
+          Object.assign(this.$data, initState());
+        }
+      }
+    },
     methods: {
       ...mapMutations('video-upload', ['reset']),
       ...mapActions('tricks', ['createTrick']),
