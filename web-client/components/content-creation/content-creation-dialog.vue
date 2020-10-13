@@ -19,7 +19,6 @@
       <component :is="component"></component>
     </div>
 
-
     <div class="d-flex justify-center my-4">
       <v-btn @click="reset">
         Close
@@ -31,7 +30,7 @@
 <script>
   import {mapState, mapMutations} from 'vuex';
   import TrickSteps from "./trick-steps";
-  import {SubmissionSteps} from "../../.nuxt/components";
+  import SubmissionSteps from "./submission-steps";
 
   export default {
     name: "content-creation-dialog",
