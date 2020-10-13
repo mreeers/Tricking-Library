@@ -27,7 +27,7 @@ namespace TrickingLibrary.API.Controllers
         public Trick Get(string id) => _context.Tricks.FirstOrDefault(x => x.Id.Equals(id, StringComparison.InvariantCultureIgnoreCase));
         
         [HttpGet("{trickId}/submissions")]
-        public IEnumerable<Submission> ListSubmissionsForTrick(string trickId) =>
+        public IEnumerable<Submission> ListSubmissionsForTricks(string trickId) =>
             _context.Submissions.Where(x => x.TrickId.Equals(trickId, StringComparison.InvariantCultureIgnoreCase)).ToList();
 
         [HttpPost]

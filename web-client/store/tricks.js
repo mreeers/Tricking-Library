@@ -1,5 +1,7 @@
 ﻿const initState = () => ({
-  tricks: []
+  tricks: [],
+  categories: [],
+  difficulties: []
 });
 
 export const state = initState;
@@ -13,8 +15,10 @@ export  const getter = {
 
 
 export const mutations = {
-  setTricks(state, {tricks}) {
-    state.tricks = tricks
+  setTricks(state, {tricks, difficulties, categories}) {
+      state.tricks = tricks,
+      state.difficulties = difficulties,
+      state.categories = categories
   },
   reset(state){
     Object.assign(state, initState())
@@ -24,7 +28,9 @@ export const mutations = {
 export const actions = {
   async fetchTricks({commit}){
     const tricks = await this.$axios.$get("/api/tricks");
-    commit("setTricks", {tricks})
+    const difficulties = await this.$axios.$get("/api/difficulties");
+    const categories = await this.$axios.$get("/api/categories");
+    commit("setTricks", {tricks, difficulties, categories})
   },
   createTrick({state, commit, dispatch}, {form}){
         return this.$axios.$post("/api/tricks", form)
