@@ -10,8 +10,8 @@ using TrickingLibrary.Models;
 
 namespace TrickingLibrary.API.Controllers
 {
-    [Route("api/categories")]
     [ApiController]
+    [Route("api/categories")]
     public class CategoryController : ControllerBase
     {
         private readonly AppDbContext _context;

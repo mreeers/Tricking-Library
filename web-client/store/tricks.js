@@ -6,18 +6,25 @@
 
 export const state = initState;
 
-export  const getter = {
+export  const getters = {
   trickItems: state => state.tricks.map(x => ({
     text: x.name,
     value: x.id
-  }))
-  };
-
+  })),
+  categoryItems: state => state.categories.map(x => ({
+    text: x.name,
+    value: x.id
+  })),
+  difficultyItems: state => state.difficulties.map(x => ({
+    text: x.name,
+    value: x.id
+  })),
+};
 
 export const mutations = {
   setTricks(state, {tricks, difficulties, categories}) {
-      state.tricks = tricks,
-      state.difficulties = difficulties,
+      state.tricks = tricks
+      state.difficulties = difficulties
       state.categories = categories
   },
   reset(state){
@@ -30,7 +37,8 @@ export const actions = {
     const tricks = await this.$axios.$get("/api/tricks");
     const difficulties = await this.$axios.$get("/api/difficulties");
     const categories = await this.$axios.$get("/api/categories");
-    commit("setTricks", {tricks, difficulties, categories})
+    console.log(tricks, difficulties, categories);
+    commit("setTricks", {tricks, difficulties, categories});
   },
   createTrick({state, commit, dispatch}, {form}){
         return this.$axios.$post("/api/tricks", form)

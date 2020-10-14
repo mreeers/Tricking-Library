@@ -9,10 +9,7 @@ namespace TrickingLibrary.Models
     {
         public string Name { get; set; }
         public string Description { get; set; }
-        public string DifficultyId { get; set; }
-
-        // todo do we need this?
-        public Difficulty Difficulty { get; set; }
+        public string Difficulty { get; set; }
         public IList<TrickRelationship> Prerequisite { get; set; }
         public IList<TrickRelationship> Progressions { get; set; }
 

@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace TrickingLibrary.API.Controllers
 {
+    [ApiController]
     [Route("api/videos")]
     public class VideosController : ControllerBase
     {

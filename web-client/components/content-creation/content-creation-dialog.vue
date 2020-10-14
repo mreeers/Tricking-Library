@@ -37,7 +37,7 @@
 
   export default {
     name: "content-creation-dialog",
-    components: {CategoryForm, DifficultyForm, TrickSteps, SubmissionSteps},
+    components: {TrickSteps, SubmissionSteps, DifficultyForm, CategoryForm},
     computed: {
       ...mapState('video-upload', ['active', 'component']),
       menuItems() {

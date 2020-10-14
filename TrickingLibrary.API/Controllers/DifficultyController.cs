@@ -10,8 +10,8 @@ using TrickingLibrary.Models;
 
 namespace TrickingLibrary.API.Controllers
 {
-    [Route("api/difficulties")]
     [ApiController]
+    [Route("api/difficulties")]
     public class DifficultyController : ControllerBase
     {
         private readonly AppDbContext _context;
@@ -31,7 +31,7 @@ namespace TrickingLibrary.API.Controllers
         [HttpGet("{id}/tricks")]
         public IEnumerable<Trick> ListdifficultyForTricks(string id) =>
             _context.Tricks
-                .Where(x => x.DifficultyId.Equals(id, StringComparison.InvariantCultureIgnoreCase))
+                .Where(x => x.Difficulty.Equals(id, StringComparison.InvariantCultureIgnoreCase))
                 .ToList();
 
         [HttpPost]

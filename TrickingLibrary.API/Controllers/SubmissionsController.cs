@@ -9,8 +9,8 @@ using TrickingLibrary.Models;
 
 namespace TrickingLibrary.API.Controllers
 {
-    [Route("api/submissions")]
     [ApiController]
+    [Route("api/submissions")]
     public class SubmissionsController : ControllerBase
     {
         private readonly AppDbContext _context;
