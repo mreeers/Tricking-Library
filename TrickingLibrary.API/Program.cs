@@ -28,9 +28,9 @@ namespace TrickingLibrary.API
                     context.Add(new Difficulty { Id = "easy", Name = "Easy", Description = "Easy test" });
                     context.Add(new Difficulty { Id = "medium", Name = "Medium", Description = "medium test" });
                     context.Add(new Difficulty { Id = "hard", Name = "Hard", Description = "Hard test" });
-                    context.Add(new Category { Id = "kick", Name = "Kick" });
-                    context.Add(new Category { Id = "flip", Name = "Flip" });
-                    context.Add(new Category { Id = "swim", Name = "Swim" });
+                    context.Add(new Category { Id = "kick", Name = "Kick", Description = "Test" });
+                    context.Add(new Category { Id = "flip", Name = "Flip", Description = "Test" });
+                    context.Add(new Category { Id = "swim", Name = "Swim", Description = "Test" });
                     context.Add(new Trick
                     {
                         Id = "backwards-roll",

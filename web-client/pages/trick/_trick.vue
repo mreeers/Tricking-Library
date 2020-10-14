@@ -1,7 +1,6 @@
 <template>
   <div class="d-flex justify-center align-start">
-    <div class="mx-2 stricky">
-      <v-sheet class="pa-3 mt-2">
+      <v-sheet class="pa-3 ma-2 stricky">
         <div class="text-h6">
           {{trick.name}}
         </div>
@@ -22,7 +21,6 @@
             </v-chip-group>
         </div>
       </v-sheet>
-    </div>
   </div>
 </template>
 
@@ -43,19 +41,19 @@
             title: "Categories",
             data: this.categories.filter(x => this.trick.categories.indexOf(x.id) >= 0),
             idFactory: c => `category-${c.id}`,
-            routeFactory: c => `/`
+            routeFactory: c => `/category/${c.id}`
           },
           {
             title: "Prerequisites",
             data: this.tricks.filter(x => this.trick.prerequisites.indexOf(x.id) >= 0),
             idFactory: t => `trick-${t.id}`,
-            routeFactory: t => `/tricks/${t.id}`
+            routeFactory: t => `/trick/${t.id}`
           },
           {
             title: "Progressions",
             data: this.tricks.filter(x => this.trick.progressions.indexOf(x.id) >= 0),
             idFactory: t => `trick-${t.id}`,
-            routeFactory: t => `/tricks/${t.id}`
+            routeFactory: t => `/trick/${t.id}`
           },
         ]
       },
@@ -76,9 +74,5 @@
 </script>
 
 <style scoped>
-.stricky{
-  position: -webkit-sticky;
-  position: sticky;
-  top: 48px;
-}
+
 </style>

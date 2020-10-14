@@ -3,7 +3,7 @@
 
     <div v-if="tricks">
       <div v-for="t in tricks">
-        <v-btn :to="`/tricks/${t.id}`">{{t.name}}</v-btn>
+        <v-btn :to="`/trick/${t.id}`">{{t.name}}</v-btn>
       </div>
     </div>
   </div>
@@ -14,7 +14,5 @@
 
   export default {
     computed: mapState('tricks', ['tricks'])
-
-
   }
 </script>
