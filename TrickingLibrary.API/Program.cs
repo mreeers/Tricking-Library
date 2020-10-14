@@ -25,11 +25,34 @@ namespace TrickingLibrary.API
 
                 if (env.IsDevelopment())
                 {
-                    context.Difficulties.Add(new Difficulty { Id = "easy", Name = "Easy", Description = "Easy test" });
-                    context.Difficulties.Add(new Difficulty { Id = "hard", Name = "Hard", Description = "Hard test" });
-                    context.Categories.Add(new Category { Id = "kick", Name = "Kick" });
-                    context.Categories.Add(new Category { Id = "flip", Name = "Flip" });
-                    context.Categories.Add(new Category { Id = "swim", Name = "Swim" });
+                    context.Add(new Difficulty { Id = "easy", Name = "Easy", Description = "Easy test" });
+                    context.Add(new Difficulty { Id = "medium", Name = "Medium", Description = "medium test" });
+                    context.Add(new Difficulty { Id = "hard", Name = "Hard", Description = "Hard test" });
+                    context.Add(new Category { Id = "kick", Name = "Kick" });
+                    context.Add(new Category { Id = "flip", Name = "Flip" });
+                    context.Add(new Category { Id = "swim", Name = "Swim" });
+                    context.Add(new Trick
+                    {
+                        Id = "backwards-roll",
+                        Name = "Backwards Roll",
+                        Description = "This is Backwards Roll test",
+                        Difficulty = "easy",
+                        TrickCategories = new List<TrickCategory> {new TrickCategory{CategoryId = "flip"}}
+                    });
+                    context.Add(new Trick
+                    {
+                        Id = "back-flip",
+                        Name = "Back Flip",
+                        Description = "This is Back Flip test",
+                        Difficulty = "medium",
+                        TrickCategories = new List<TrickCategory> { new TrickCategory { CategoryId = "flip" } },
+                        Prerequisite = new List<TrickRelationship> { new TrickRelationship 
+                            { 
+                                PrerequisiteId = "backwards-roll"
+                            } 
+                        }
+                    });
+
                     context.SaveChanges();
                 }
             }

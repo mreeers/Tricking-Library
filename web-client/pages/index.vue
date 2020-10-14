@@ -13,11 +13,8 @@
   import {mapState} from 'vuex';
 
   export default {
-    computed: {
-      ...mapState('tricks', ['tricks']),
-    },
-    async fetch() {
-      await this.$store.dispatch("tricks/fetchTricks", null, {root: true});
-    }
+    computed: mapState('tricks', ['tricks'])
+
+
   }
 </script>
