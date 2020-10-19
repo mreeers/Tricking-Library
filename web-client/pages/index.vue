@@ -1,6 +1,5 @@
 <template>
   <div>
-
     <div v-if="tricks">
       <div v-for="t in tricks">
         <v-btn :to="`/trick/${t.id}`">{{t.name}}</v-btn>

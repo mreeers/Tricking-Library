@@ -1,14 +1,12 @@
 <template>
   <div class="d-flex justify-center align-start">
     <div class="mx-2" v-if="submissions">
-      <div v-for="x in 1">
+      <div v-for="x in 2">
 
-        <div v-for="s in submissions">
-          {{s.id}} - {{s.description}} - {{s.trickId}}
-          <div>
-            <video width="400" controls :src="`http://localhost:5000/api/videos/${s.video}`"></video>
-          </div>
-        </div>
+        <v-card v-for="s in submissions" :key="`${x}-${trick.id}-${s.id}`">
+          <video-player :video="s.video"/>
+          <v-card-text>{{s.description}}</v-card-text>
+        </v-card>
       </div>
     </div>
 
@@ -16,7 +14,7 @@
       <div class="text-h5">
         <span>{{ trick.name }}</span>
         <v-chip class="mb-1 ml-2" small :to="`/difficulty/${difficulty.id}`">
-          {{ difficulty.name }} Difficulty
+          {{ difficulty.name }}
         </v-chip>
       </div>
       <v-divider class="my-1"></v-divider>
@@ -36,7 +34,9 @@
 
 <script>
   import {mapState, mapGetters} from 'vuex';
+  import VideoPlayer from "../../components/video-player";
   export default {
+    components: {VideoPlayer},
     data: () => ({
       trick: null,
       difficulty: null

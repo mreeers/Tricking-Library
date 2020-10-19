@@ -52,7 +52,18 @@ namespace TrickingLibrary.API
                             } 
                         }
                     });
-
+                    context.Add(new Submission
+                    {
+                        TrickId = "back-flip",
+                        Description = "test descriptions",
+                        Video = "0cag3fs5.hae.mp4"
+                    });
+                    context.Add(new Submission
+                    {
+                        TrickId = "back-flip",
+                        Description = "test descriptions 2",
+                        Video = "40vsd0kt.ext.mp4"
+                    });
                     context.SaveChanges();
                 }
             }
