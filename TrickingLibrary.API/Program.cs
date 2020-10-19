@@ -38,7 +38,7 @@ namespace TrickingLibrary.API
                         Description = "This is Backwards Roll test",
                         Difficulty = "easy",
                         TrickCategories = new List<TrickCategory> {new TrickCategory{CategoryId = "flip"}}
-                    });
+                    }); 
                     context.Add(new Trick
                     {
                         Id = "back-flip",
