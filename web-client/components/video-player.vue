@@ -36,6 +36,10 @@
     display: flex;
     position: relative;
     width: 480px;
+    height: 500px;
+
+    border-top-left-radius: inherit;
+    border-top-right-radius: inherit;
 
     .play-button {
       position: absolute;
@@ -54,6 +58,9 @@
     video {
       width: 100%;
       z-index: 1;
+
+      border-top-left-radius: inherit;
+      border-top-right-radius: inherit;
     }
   }
 </style>

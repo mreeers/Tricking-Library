@@ -1,16 +1,15 @@
 <template>
-  <div class="d-flex justify-center align-start">
-    <div class="mx-2" v-if="submissions">
+  <div class="d-flex mt-3 justify-center align-start">
+    <div class="mx-3" v-if="submissions">
       <div v-for="x in 2">
-
-        <v-card v-for="s in submissions" :key="`${x}-${trick.id}-${s.id}`">
-          <video-player :video="s.video"/>
+        <v-card class="mb-3" v-for="s in submissions" :key="`${x}-${trick.id}-${s.id}`" >
+            <video-player :video="s.video" :key="`v-${x}-${trick.id}-${s.id}`" />
           <v-card-text>{{s.description}}</v-card-text>
         </v-card>
       </div>
     </div>
 
-    <v-sheet class="pa-3 ma-2 sticky">
+    <v-sheet class="pa-3 sticky">
       <div class="text-h5">
         <span>{{ trick.name }}</span>
         <v-chip class="mb-1 ml-2" small :to="`/difficulty/${difficulty.id}`">
