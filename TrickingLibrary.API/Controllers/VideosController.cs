@@ -1,4 +1,5 @@
-﻿using System.Diagnostics;
+﻿using System;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -31,33 +32,13 @@ namespace TrickingLibrary.API.Controllers
         public async Task<IActionResult> UploadVideo(IFormFile video)
         {
             var mime = video.FileName.Split('.').Last();
-            var fileName = string.Concat(Path.GetRandomFileName(), ".", mime);
+            var fileName = string.Concat($"temp_{DateTime.Now.Ticks}", ".", mime); ;
             var savePath = Path.Combine(_env.WebRootPath, fileName);
 
             await using (var fileStream = new FileStream(savePath, FileMode.Create, FileAccess.Write))
             {
                 await video.CopyToAsync(fileStream);
             }
-
-            await Task.Run(() =>
-            {
-                var startInfo = new ProcessStartInfo
-                {
-                    FileName = Path.Combine(_env.ContentRootPath, "ffmpeg", "ffmpeg.exe"),
-                    Arguments = $"-y -i {savePath} -an -vf scale=540x380 ",
-                    WorkingDirectory = _env.WebRootPath,
-                    CreateNoWindow = true,
-                    UseShellExecute = false,
-                };
-
-                using (var process = new Process { StartInfo = startInfo })
-                {
-                    process.Start();
-                    process.WaitForExit();
-                }
-
-            });
-
 
             return Ok(fileName);
         }

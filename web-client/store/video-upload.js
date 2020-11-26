@@ -1,5 +1,6 @@
 ﻿const initState = () => ({
   uploadPromise: null,
+  uploadCompleted: false,
   active: false,
   component: null
 });
@@ -17,6 +18,9 @@ export const mutations = {
   setTask(state, {uploadPromise}) {
     state.uploadPromise = uploadPromise;
   },
+  completedUpload(state) {
+    state.uploadCompleted = true;
+  },
   reset(state){
     Object.assign(state, initState())
   }
@@ -24,8 +28,14 @@ export const mutations = {
 
 export const actions = {
   startVideoUpload({commit, dispatch}, {form}){
-    const uploadPromise = this.$axios.$post("/api/videos", form);
-    commit("setTask", {uploadPromise})
+    const source = this.$axios.CancelToken.source();
+    const uploadPromise = this.$axios.$post("/api/videos", form, {cancelToken: source.token})
+      .then(({data}) => {
+        commit('completedUpload');
+        return data
+      });
+
+    commit("setTask", {uploadPromise});
   },
   async createSubmission({state, commit, dispatch}, {form}){
     if (!state.uploadPromise) {

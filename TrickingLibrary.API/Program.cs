@@ -56,13 +56,15 @@ namespace TrickingLibrary.API
                     {
                         TrickId = "back-flip",
                         Description = "test descriptions",
-                        Video = "0cag3fs5.hae.mp4"
-                    });
+                        Video = "0cag3fs5.hae.mp4",
+                        VideoProcessed = true
+                    }) ;
                     context.Add(new Submission
                     {
                         TrickId = "back-flip",
                         Description = "test descriptions 2",
-                        Video = "40vsd0kt.ext.mp4"
+                        Video = "40vsd0kt.ext.mp4",
+                        VideoProcessed = true
                     });
                     context.SaveChanges();
                 }
