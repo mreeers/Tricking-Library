@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using TrickingLibrary.API.BackgroundServices;
+using TrickingLibrary.API.BackgroundServices.VideoEditing;
 using TrickingLibrary.Data;
 
 namespace TrickingLibrary.API
@@ -19,6 +19,7 @@ namespace TrickingLibrary.API
             services.AddDbContext<AppDbContext>(options => options.UseInMemoryDatabase("Dev"));
             services.AddHostedService<VideosEditingBackgroundService>();
             services.AddSingleton(_ => Channel.CreateUnbounded<EditVideoMessage>());
+            services.AddSingleton<VideoManager>();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

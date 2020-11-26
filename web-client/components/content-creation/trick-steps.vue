@@ -51,15 +51,7 @@ import {mapActions, mapGetters, mapMutations, mapState} from 'vuex';
     name: "trick-steps",
     data: initState,
     computed: {
-      ...mapState('video-upload', ['active']),
       ...mapGetters('tricks', ['categoryItems', 'difficultyItems', "trickItems"]),
-    },
-    watch: {
-      'active': function (newValue) {
-        if(!newValue) {
-          Object.assign(this.$data, initState());
-        }
-      }
     },
     methods: {
       ...mapMutations('video-upload', ['reset']),
