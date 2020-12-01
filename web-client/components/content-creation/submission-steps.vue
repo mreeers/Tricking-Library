@@ -20,8 +20,8 @@
         <v-stepper-step step="4">Review</v-stepper-step>
       </v-stepper-header>
 
-      <v-stepper-items>
-        <v-stepper-content step="1" class="pt-0">
+      <v-stepper-items class="fpt-0">
+        <v-stepper-content step="1" >
           <div>
             <v-file-input accept="video/*" @change="handleFile"></v-file-input>
           </div>

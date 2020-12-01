@@ -41,17 +41,17 @@ namespace TrickingLibrary.API.Controllers
         [HttpDelete("{fileName}")]
         public IActionResult DeleteTemporaryVideo(string fileName)
         {
-            if (_videoManager.TemporaryVideoExists(fileName))
+            if (_videoManager.TemporaryFileExists(fileName))
             {
                 return BadRequest();
             }
 
-            if (!_videoManager.TemporaryVideoExists(fileName))
+            if (!_videoManager.TemporaryFileExists(fileName))
             {
                 return NoContent();
             }
 
-            _videoManager.DeleteTemporaryVideo(fileName);
+            _videoManager.DeleteTemporaryFile(fileName);
 
             return Ok();
         }
