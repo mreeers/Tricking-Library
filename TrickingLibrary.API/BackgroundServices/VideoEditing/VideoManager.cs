@@ -1,11 +1,9 @@
-﻿using Microsoft.AspNetCore.Hosting;
+﻿using System;
+using System.IO;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Hosting;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace TrickingLibrary.API.BackgroundServices.VideoEditing
 {
@@ -14,6 +12,7 @@ namespace TrickingLibrary.API.BackgroundServices.VideoEditing
         private readonly IWebHostEnvironment _env;
         public const string TempPrefix = "temp_";
         public const string ConvertedPrefix = "c";
+        public const string ThumbnailPrefix = "t";
 
         public VideoManager(IWebHostEnvironment env)
         {
@@ -45,6 +44,7 @@ namespace TrickingLibrary.API.BackgroundServices.VideoEditing
         }
 
         public string GenerateConvertedFileName() => $"{ConvertedPrefix}{DateTime.Now.Ticks}.mp4";
+        public string GenerateThumbnailFileName() => $"{ThumbnailPrefix}{DateTime.Now.Ticks}.png";
 
         public async Task<string> SaveTemporaryVideo(IFormFile video)
         {

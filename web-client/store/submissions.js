@@ -1,4 +1,4 @@
-const initState = () => ({
+﻿const initState = () => ({
   submissions: []
 });
 
@@ -18,7 +18,7 @@ export const actions = {
     const submissions = await this.$axios.$get(`/api/tricks/${trickId}/submissions`);
     commit("setSubmissions", {submissions})
   },
-  async createSubmission({state, commit, dispatch}, {form}){
+  createSubmission({state, commit, dispatch}, {form}){
     return this.$axios.$post("/api/submissions", form)
   }
 };

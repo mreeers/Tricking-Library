@@ -2,7 +2,7 @@
 {
     public class EditVideoMessage
     {
-        public int SubmmisionId { get; set; }
+        public int SubmissionId { get; set; }
         public string Input { get; set; }
     }
 }

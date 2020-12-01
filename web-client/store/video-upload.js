@@ -11,17 +11,17 @@ export const state = initState;
 export const mutations = {
   activate(state, {component}) {
     state.active = true;
-    state.component = component;
+    state.component = component
   },
   hide(state) {
     state.active = false;
   },
   setTask(state, {uploadPromise, source}) {
-    state.uploadPromise = uploadPromise;
-    state.uploadCancelSource = source;
+    state.uploadPromise = uploadPromise
+    state.uploadCancelSource = source
   },
-  completedUpload(state) {
-    state.uploadCompleted = true;
+  completeUpload(state) {
+    state.uploadCompleted = true
   },
   reset(state){
     Object.assign(state, initState())
@@ -30,13 +30,13 @@ export const mutations = {
 
 export const actions = {
   startVideoUpload({commit, dispatch}, {form}){
-    const source = this.$axios.CancelToken.source();
-    const uploadPromise = this.$axios.$post("/api/videos", form, {
+    const source = this.$axios.CancelToken.source()
+    const uploadPromise = this.$axios.post("/api/videos", form, {
       progress: false,
       cancelToken: source.token
     })
       .then(({data}) => {
-        commit('completedUpload');
+        commit('completeUpload');
         return data
       })
       .catch(err => {
@@ -60,16 +60,14 @@ export const actions = {
 
     commit('reset');
   },
-  async createSubmission({state, commit, dispatch}, {form}){
+  async createSubmission({state, commit, dispatch}, {form}) {
+    console.log(form.video)
     if (!state.uploadPromise) {
-      console.log("uploadPromise is null");
+      console.log("uploadPromise is null")
       return;
     }
     form.video = await state.uploadPromise;
-    await this.createSubmission({
-      form: this.form
-    });
-    await  dispatch('submissions/createSubmission', {form}, {root: true});
+    await dispatch('submissions/createSubmission', {form}, {root: true});
     commit('reset');
   }
 };

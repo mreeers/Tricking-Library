@@ -76,6 +76,7 @@
       ...mapActions('video-upload', ['startVideoUpload', 'createSubmission']),
       async handleFile(file) {
         if (!file) return;
+
         const form = new FormData();
         form.append("video", file);
         this.startVideoUpload({form});

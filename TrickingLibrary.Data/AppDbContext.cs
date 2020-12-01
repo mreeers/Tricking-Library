@@ -14,6 +14,7 @@ namespace TrickingLibrary.Data
         public DbSet<TrickRelationship> TrickRelationships { get; set; }
         public DbSet<Category> Categories { get; set; }
         public DbSet<TrickCategory> TrickCategories { get; set; }
+        public DbSet<Video> Videos { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

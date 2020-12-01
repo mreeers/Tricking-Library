@@ -2,33 +2,31 @@
   <item-content-layout>
     <template v-slot:content>
       <div v-if="submissions">
-        <div v-for="x in 2">
-          <v-card class="mb-3" v-for="s in submissions" :key="`${x}-${trick.id}-${s.id}`" >
-            <video-player :video="s.video" :key="`v-${x}-${trick.id}-${s.id}`" />
-            <v-card-text>{{s.description}}</v-card-text>
-          </v-card>
-        </div>
+        <v-card class="mb-3" v-for="s in submissions" :key="`${trick.id}-${s.id}`">
+          <video-player :video="s.video" :key="`v-${trick.id}-${s.id}`"/>
+          <v-card-text>{{s.description}}</v-card-text>
+        </v-card>
       </div>
     </template>
 
     <template v-slot:item>
-        <div class="text-h5">
-          <span>{{ trick.name }}</span>
-          <v-chip class="mb-1 ml-2" small :to="`/difficulty/${difficulty.id}`">
-            {{ difficulty.name }}
+      <div class="text-h5">
+        <span>{{ trick.name }}</span>
+        <v-chip class="mb-1 ml-2" small :to="`/difficulty/${difficulty.id}`">
+          {{ difficulty.name }}
+        </v-chip>
+      </div>
+      <v-divider class="my-1"></v-divider>
+      <div class="text-body-2">{{ trick.description }}</div>
+      <v-divider class="my-1"></v-divider>
+      <div v-for="rd in relatedData" v-if="rd.data.length > 0">
+        <div class="text-subtitle-1">{{rd.title}}</div>
+        <v-chip-group>
+          <v-chip v-for="d in rd.data" :key="rd.idFactory(d)" small :to="rd.routeFactory(d)">
+            {{d.name}}
           </v-chip>
-        </div>
-        <v-divider class="my-1"></v-divider>
-        <div class="text-body-2">{{ trick.description }}</div>
-        <v-divider class="my-1"></v-divider>
-        <div v-for="rd in relatedData" v-if="rd.data.length > 0">
-          <div class="text-subtitle-1">{{rd.title}}</div>
-          <v-chip-group>
-            <v-chip v-for="d in rd.data" :key="rd.idFactory(d)" small :to="rd.routeFactory(d)">
-              {{d.name}}
-            </v-chip>
-          </v-chip-group>
-        </div>
+        </v-chip-group>
+      </div>
     </template>
   </item-content-layout>
 </template>
@@ -37,6 +35,7 @@
   import {mapState, mapGetters} from 'vuex';
   import VideoPlayer from "../../components/video-player";
   import ItemContentLayout from "../../components/item-content-layout";
+
   export default {
     components: {ItemContentLayout, VideoPlayer},
     data: () => ({

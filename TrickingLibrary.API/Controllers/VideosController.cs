@@ -10,7 +10,6 @@ using TrickingLibrary.API.BackgroundServices.VideoEditing;
 
 namespace TrickingLibrary.API.Controllers
 {
-    [ApiController]
     [Route("api/videos")]
     public class VideosController : ControllerBase
     {

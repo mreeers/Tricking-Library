@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using TrickingLibrary.API.Form;
 using TrickingLibrary.API.ViewModels;
 using TrickingLibrary.Data;
@@ -33,7 +34,10 @@ namespace TrickingLibrary.API.Controllers
         
         [HttpGet("{trickId}/submissions")]
         public IEnumerable<Submission> ListSubmissionsForTricks(string trickId) =>
-            _context.Submissions.Where(x => x.TrickId.Equals(trickId, StringComparison.InvariantCultureIgnoreCase)).ToList();
+            _context.Submissions
+            .Include(x => x.Video)
+            .Where(x => x.TrickId.Equals(trickId, StringComparison.InvariantCultureIgnoreCase))
+            .ToList();
 
         [HttpPost]
         public async Task<object> Create([FromBody] TrickForm trickForm)
