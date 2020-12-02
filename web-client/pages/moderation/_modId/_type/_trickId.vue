@@ -1,30 +1,24 @@
 <template>
   <div>
     <div v-if="item">
-      <div>{{item.description}}</div>
-      <div v-if="replyId > 0">
-        Replying to {{replyId}}
-        <v-btn @click="replyId = 0">
-          Clear
-        </v-btn>
-      </div>
-      <div>
-        <v-text-field label="Comment" v-model="comment"></v-text-field>
-        <v-btn @click="send">Send</v-btn>
-      </div>
-      <div class="my-1" v-for="c in comments">
-      <span v-html="c.htmlContent"></span>
-        <v-btn small @click="replyId = c.id">Reply</v-btn>
-        <v-btn small @click="loadReplies(c)">Load Replies</v-btn>
-        <div v-for="r in replies">
-          <span v-html="r.htmlContent"></span>
-        </div>
-      </div>
+      {{item.description}}
     </div>
+
+    <comment-section :comments="comments" @send="send"/>
+
+    <!--    <div class="my-1" v-for="c in comments">-->
+
+    <!--      <v-btn small @click="replyId = c.id">Reply</v-btn>-->
+    <!--      <v-btn small @click="loadReplies(c)">Load Replies</v-btn>-->
+    <!--      <div v-for="r in c.replies">-->
+    <!--        <span v-html="r.htmlContent"></span>-->
+    <!--      </div>-->
+    <!--    </div>-->
   </div>
 </template>
 
 <script>
+  import CommentSection from "../../../../components/comments/comment-section";
   const endpointResolver = (type) => {
     if (type === 'trick') return 'tricks'
   }
@@ -33,6 +27,7 @@
     replies: []
   });
   export default {
+    components: {CommentSection},
     data: () => ({
       item: null,
       comments: [],
@@ -48,29 +43,15 @@
         .then((comments) => this.comments = comments.map(commentWithReplies))
     },
     methods: {
-      send() {
+      send(content) {
         const {modId} = this.$route.params
-        if (this.replyId > 0) {
-          this.$axios.$post(`/api/comments/${this.replyId}/replies`,
-            {content: this.comment})
-            .then((comment) => this.comments
-              .find(x => x.id === this.replyId)
-              .replies
-              .push(comment))
-        } else {
-          this.$axios.$post(`/api/moderation-items/${modId}/comments`,
-            {content: this.comment})
-            .then((comment) => this.comments.push(commentWithReplies(comment)))
-        }
+        return this.$axios.$post(`/api/moderation-items/${modId}/comments`,
+          {content})
+          .then((comment) => this.comments.push(comment))
       },
-      loadReplies(comment){
-        this.$axios.$get(`/api/comments/${comment.id}/replies`)
-          .then((comments) => this.$set(comment, 'replies', comments))
-      }
     }
   }
 </script>
 
 <style scoped>
-
 </style>
