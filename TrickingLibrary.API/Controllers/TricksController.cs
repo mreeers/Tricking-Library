@@ -24,12 +24,12 @@ namespace TrickingLibrary.API.Controllers
         }
 
         [HttpGet]
-        public IEnumerable<object> All() => _context.Tricks.Select(TrickViewModels.Default).ToList();
+        public IEnumerable<object> All() => _context.Tricks.Select(TrickViewModels.Projection).ToList();
 
         [HttpGet("{id}")]
         public object Get(string id) => _context.Tricks
             .Where(x => x.Id.Equals(id, StringComparison.InvariantCultureIgnoreCase))
-            .Select(TrickViewModels.Default)
+            .Select(TrickViewModels.Projection)
             .FirstOrDefault();
         
         [HttpGet("{trickId}/submissions")]
@@ -55,7 +55,7 @@ namespace TrickingLibrary.API.Controllers
             };
             _context.Add(trick);
             await _context.SaveChangesAsync();
-            return TrickViewModels.Default.Compile().Invoke(trick);
+            return TrickViewModels.Create(trick);
         }
 
         [HttpPut]
@@ -67,7 +67,7 @@ namespace TrickingLibrary.API.Controllers
             }
             _context.Add(trick);
             await _context.SaveChangesAsync();
-            return TrickViewModels.Default.Compile().Invoke(trick); 
+            return TrickViewModels.Create(trick); 
         }
 
         // /api/tricks/{id}
