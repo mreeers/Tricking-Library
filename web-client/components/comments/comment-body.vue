@@ -2,10 +2,10 @@
   <div>
     <div>
       <p class="mb-1" v-html="comment.htmlContent"></p>
-      <v-btn text v-if="!replying" @click="replying = true">reply</v-btn>
-      <v-btn text v-if="$listeners['load-replies']" @click="$emit('load-replies')">Load replies</v-btn>
+      <v-btn text small v-if="!replying" @click="replying = true">reply</v-btn>
+      <v-btn text small v-if="$listeners['load-replies']" @click="$emit('load-replies')">Load replies</v-btn>
     </div>
-    <comment-input v-if="replying" @send="(c) => $emit('send', c)" @cancel="replying = false" />
+    <comment-input label="Reply" v-if="replying" @send="(c) => $emit('send', c)" @cancel="replying = false" />
   </div>
 </template>
 

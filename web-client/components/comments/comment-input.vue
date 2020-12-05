@@ -1,8 +1,8 @@
 <template>
   <div>
-    <v-text-field label="Comment" v-model="content"></v-text-field>
+    <v-text-field label="Comment" v-model="content" @keydown.ctrl.enter="$emit('send', content)" clearable></v-text-field>
     <v-btn v-if="$listeners['cancel']" @click="$emit('cancel')">Cancel</v-btn>
-    <v-btn @click="$emit('send', content)">{{label}}</v-btn>
+    <v-btn :disabled="!content" @click="$emit('send', content)">{{label}}</v-btn>
   </div>
 </template>
 

@@ -40,9 +40,7 @@ namespace TrickingLibrary.API.Controllers
         [HttpPost("{id}/comments")]
         public async Task<IActionResult> Comment(int id, [FromBody] Comment comment)
         {
-            var modItem = _context.ModerationItems.FirstOrDefault(x => x.Id == id);
-
-            if (modItem == null)
+            if (!_context.ModerationItems.Any(x => x.Id == id))
             {
                 return NoContent();
             }
@@ -57,11 +55,32 @@ namespace TrickingLibrary.API.Controllers
                                             var tag = match.Groups["tag"].Value;
                                             return content.Replace(tag, $"<a href=\"{tag}-user-link\">{tag}</a>");
                                         });
-
-            modItem.Comments.Add(comment);
+            comment.ModerationItemId = id;
+            _context.Add(comment);
             await _context.SaveChangesAsync();
 
             return Ok(CommentViewModel.Create(comment));
+        }
+
+        [HttpGet("{id}/reviews")]
+        public IEnumerable<Review> GetReviews(int id) =>
+            _context.Reviews
+                .Where(x => x.ModerationItemId.Equals(id))
+                .ToList();
+
+        [HttpPost("{id}/reviews")]
+        public async Task<IActionResult> Review(int id, [FromBody] Review review)
+        {
+            if (!_context.ModerationItems.Any(x => x.Id == id))
+            {
+                return NoContent();
+            }
+
+            review.ModerationItemId = id;
+            _context.Add(review);
+            await _context.SaveChangesAsync();
+
+            return Ok(review);
         }
     }
 }
