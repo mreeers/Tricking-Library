@@ -1,0 +1,12 @@
+﻿@page
+@model TrickingLibrary.API.Pages.Account.LoginModel
+@{
+}
+<form method="post">
+    <input asp-for="Form.ReturnUrl" value="@Model.Form.ReturnUrl" type="hidden"/>
+    <input asp-for="Form.UserName" />
+    <span asp-validation-for="Form.UserName"></span>
+    <input asp-for="Form.Password" />
+    <span asp-validation-for="Form.Password"></span>
+    <button type="submit">Sign In</button>
+</form>

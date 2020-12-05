@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -22,6 +23,7 @@ namespace TrickingLibrary.API
             using(var scope = host.Services.CreateScope())
             {
                 var context = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+                
                 var env = scope.ServiceProvider.GetRequiredService<IWebHostEnvironment>();
 
                 if (env.IsDevelopment())
@@ -89,6 +91,10 @@ namespace TrickingLibrary.API
                         Type = ModerationTypes.Trick
                     });
                     context.SaveChanges();
+
+                    var user = new IdentityUser("test");
+                    var userManager = scope.ServiceProvider.GetRequiredService<UserManager<IdentityUser>>();
+                    userManager.CreateAsync(user, "password").GetAwaiter().GetResult();
                 }
             }
 

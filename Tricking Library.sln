@@ -5,9 +5,9 @@ VisualStudioVersion = 16.0.30128.74
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TrickingLibrary.API", "TrickingLibrary.API\TrickingLibrary.API.csproj", "{A7D4E86E-8BE3-4298-9482-C467B284C1F9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TrickingLibrary.Models", "TrickingLibrary.Models\TrickingLibrary.Models.csproj", "{8D322F84-39E2-4283-82C4-F2E1CBBDE7A3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TrickingLibrary.Models", "TrickingLibrary.Models\TrickingLibrary.Models.csproj", "{8D322F84-39E2-4283-82C4-F2E1CBBDE7A3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TrickingLibrary.Data", "TrickingLibrary.Data\TrickingLibrary.Data.csproj", "{971DE88B-D03A-4481-8DF0-55B317B6A970}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TrickingLibrary.Data", "TrickingLibrary.Data\TrickingLibrary.Data.csproj", "{971DE88B-D03A-4481-8DF0-55B317B6A970}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
