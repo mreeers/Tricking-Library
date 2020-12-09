@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Channels;
 using System.Threading.Tasks;
+using IdentityServer4;
 using IdentityServer4.Models;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -104,12 +105,21 @@ namespace TrickingLibrary.API
                     {
                         ClientId = "web-client",
                         AllowedGrantTypes = GrantTypes.Code,
+
                         RedirectUris = new[] {"http://localhost:3000"},
                         PostLogoutRedirectUris = new[] {"http://localhost:3000"},
                         AllowedCorsOrigins = new[] {"http://localhost:3000"},
+
+                        AllowedScopes = new []
+                        {
+                            IdentityServerConstants.StandardScopes.OpenId,
+                            IdentityServerConstants.StandardScopes.Profile,
+                        },
+
                         RequirePkce = true,
                         AllowAccessTokensViaBrowser = true,
-                        RequireConsent = false
+                        RequireConsent = false,
+                        RequireClientSecret = false
                     }
                 });
 

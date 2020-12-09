@@ -92,9 +92,9 @@ namespace TrickingLibrary.API
                     });
                     context.SaveChanges();
 
-                    var user = new IdentityUser("test");
                     var userManager = scope.ServiceProvider.GetRequiredService<UserManager<IdentityUser>>();
-                    userManager.CreateAsync(user, "password").GetAwaiter().GetResult();
+                    var user = new IdentityUser("user");
+                    userManager.CreateAsync(user, "user").GetAwaiter().GetResult();
                 }
             }
 
