@@ -3,10 +3,10 @@
 @{
 }
 <form method="post">
-    <input asp-for="Form.ReturnUrl" value="@Model.Form.ReturnUrl" type="hidden"/>
-    <input asp-for="Form.UserName" />
-    <span asp-validation-for="Form.UserName"></span>
-    <input asp-for="Form.Password" />
+    <input type="hidden" asp-for="Form.ReturnUrl" value="@Model.Form.ReturnUrl">
+    <input asp-for="Form.Username">
+    <span asp-validation-for="Form.Username"></span>
+    <input asp-for="Form.Password">
     <span asp-validation-for="Form.Password"></span>
     <button type="submit">Sign In</button>
 </form>

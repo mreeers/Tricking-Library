@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using IdentityServer4;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -25,6 +27,14 @@ namespace TrickingLibrary.API.Controllers
 
         [HttpGet]
         public IEnumerable<object> All() => _context.Tricks.Select(TrickViewModels.Projection).ToList();
+
+        [HttpGet("test")]
+        [Authorize(Policy = IdentityServerConstants.LocalApi.PolicyName)]
+        public string TestAuth() => "test";
+
+        [HttpGet("mod")]
+        [Authorize(Policy = TrickingLibraryConstants.Policies.Mod)]
+        public string ModAuth() => "mod";
 
         [HttpGet("{id}")]
         public object Get(string id) => _context.Tricks

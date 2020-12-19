@@ -2,13 +2,15 @@
   <div>
     <div>
       <v-btn @click="login">Login</v-btn>
+      <v-btn @click="api('test')">Api Test Auth</v-btn>
+      <v-btn @click="api('mod')">Api Mod Auth</v-btn>
     </div>
     <div v-for="s in sections">
       <div class="d-flex flex-column align-center">
-        <p class="text-h5">{{s.title}}</p>
+        <p class="text-h5">{{ s.title }}</p>
         <div>
           <v-btn class="mx-1" v-for="item in s.collection" :key="`${s.title}-${item.id}`" :to="s.routeFactory(item.id)">
-            {{item.name}}
+            {{ item.name }}
           </v-btn>
         </div>
       </div>
@@ -28,35 +30,43 @@
     created() {
       if (!process.server) {
         this.userMgr = new UserManager({
-          authority: "http://localhost:5000",
+          authority: "https://localhost:5001",
           client_id: "web-client",
           redirect_uri: "http://localhost:3000",
           response_type: "code",
-          scope: 'openid profile',
+          scope: 'openid profile IdentityServerApi',
           post_logout_redirect_uri: "http://localhost:3000",
           // silent_redirect_uri: "http://localhost:3000/",
-          userStore: new WebStorageStateStore({ store: window.localStorage })
+          userStore: new WebStorageStateStore({store: window.localStorage})
         })
+        this.userMgr.getUser().then(user => {
+          if (user) {
+            console.log("user from storage", user)
+            this.$axios.setToken(`Bearer ${user.access_token}`)
+          }
+        });
         const {code, scope, session_state, state} = this.$route.query
         if (code && scope && session_state && state) {
           this.userMgr.signinRedirectCallback()
-          .then(user => {
-            console.log(user)
-            this.$route.push('/')
-          })
+            .then(user => {
+              console.log(user)
+              this.$axios.setToken(`Bearer ${user.access_token}`)
+              this.$router.push('/')
+            })
         }
       }
     },
     methods: {
       login() {
         return this.userMgr.signinRedirect()
+      },
+      api(x) {
+        return this.$axios.$get("/api/tricks/" + x)
+          .then(msg => console.log(msg));
       }
     },
     computed: {
       ...mapState('tricks', ['tricks', 'categories', 'difficulties']),
-      api() {
-        return process.env.API_URL
-      },
       sections() {
         return [
           {collection: this.tricks, title: "Tricks", routeFactory: (id) => `/trick/${id}`},

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Channels;
 using System.Threading.Tasks;
 using IdentityServer4;
@@ -21,8 +22,8 @@ namespace TrickingLibrary.API
 {
     public class Startup
     {
-        private const string AllCors = "All";
         private readonly IWebHostEnvironment _env;
+        private const string AllCors = "All";
 
         public Startup(IWebHostEnvironment env)
         {
@@ -31,15 +32,20 @@ namespace TrickingLibrary.API
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddControllers();
             services.AddDbContext<AppDbContext>(options => options.UseInMemoryDatabase("Dev"));
+
             AddIdentity(services);
+
+            services.AddControllers();
+
             services.AddRazorPages();
+
             services.AddHostedService<VideoEditingBackgroundService>()
                 .AddSingleton(_ => Channel.CreateUnbounded<EditVideoMessage>())
                 .AddSingleton<VideoManager>()
-                .AddCors(options => options.AddPolicy(AllCors, build => build.AllowAnyHeader().AllowAnyOrigin().AllowAnyMethod()));
-            
+                .AddCors(options => options.AddPolicy(AllCors, build => build.AllowAnyHeader()
+                    .AllowAnyOrigin()
+                    .AllowAnyMethod()));
         }
 
         public void Configure(IApplicationBuilder app)
@@ -49,39 +55,44 @@ namespace TrickingLibrary.API
                 app.UseDeveloperExceptionPage();
             }
 
-            app.UseRouting();
-
             app.UseCors(AllCors);
+
+            app.UseRouting();
 
             app.UseAuthentication();
 
             app.UseIdentityServer();
 
+            app.UseAuthorization();
+
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapDefaultControllerRoute();
+
                 endpoints.MapRazorPages();
             });
         }
 
         private void AddIdentity(IServiceCollection services)
         {
-            services.AddDbContext<IdentityDbContext>(config => config.UseInMemoryDatabase("DevIdentity"));
-            services.AddIdentity<IdentityUser, IdentityRole>(options => 
+            services.AddDbContext<IdentityDbContext>(config =>
+                config.UseInMemoryDatabase("DevIdentity"));
+
+            services.AddIdentity<IdentityUser, IdentityRole>(options =>
+            {
+                if (_env.IsDevelopment())
                 {
-                    if (_env.IsDevelopment())
-                    {
-                        options.Password.RequireDigit = false;
-                        options.Password.RequiredLength = 4;
-                        options.Password.RequireLowercase = false;
-                        options.Password.RequireUppercase = false;
-                        options.Password.RequireNonAlphanumeric = false;
-                    }
-                    else
-                    {
-                        //TODO: Config to production
-                    }
-                })
+                    options.Password.RequireDigit = false;
+                    options.Password.RequiredLength = 4;
+                    options.Password.RequireLowercase = false;
+                    options.Password.RequireUppercase = false;
+                    options.Password.RequireNonAlphanumeric = false;
+                }
+                else
+                {
+                    //todo configure for production
+                }
+            })
                 .AddEntityFrameworkStores<IdentityDbContext>()
                 .AddDefaultTokenProviders();
 
@@ -96,7 +107,12 @@ namespace TrickingLibrary.API
                 identityServerBuilder.AddInMemoryIdentityResources(new IdentityResource[]
                 {
                     new IdentityResources.OpenId(),
-                    new IdentityResources.Profile()
+                    new IdentityResources.Profile(),
+                });
+
+                identityServerBuilder.AddInMemoryApiScopes(new ApiScope[]
+                {
+                    new ApiScope(IdentityServerConstants.LocalApi.ScopeName, new[] {ClaimTypes.Role}),
                 });
 
                 identityServerBuilder.AddInMemoryClients(new Client[]
@@ -110,21 +126,47 @@ namespace TrickingLibrary.API
                         PostLogoutRedirectUris = new[] {"http://localhost:3000"},
                         AllowedCorsOrigins = new[] {"http://localhost:3000"},
 
-                        AllowedScopes = new []
+                        AllowedScopes = new[]
                         {
                             IdentityServerConstants.StandardScopes.OpenId,
                             IdentityServerConstants.StandardScopes.Profile,
+                            IdentityServerConstants.LocalApi.ScopeName,
                         },
 
                         RequirePkce = true,
                         AllowAccessTokensViaBrowser = true,
                         RequireConsent = false,
-                        RequireClientSecret = false
-                    }
+                        RequireClientSecret = false,
+                    },
                 });
 
                 identityServerBuilder.AddDeveloperSigningCredential();
             }
+
+            services.AddLocalApiAuthentication();
+
+            services.AddAuthorization(options =>
+            {
+                options.AddPolicy(TrickingLibraryConstants.Policies.Mod, policy =>
+                {
+                    var is4Policy = options.GetPolicy(IdentityServerConstants.LocalApi.PolicyName);
+                    policy.Combine(is4Policy);
+                    policy.RequireClaim(ClaimTypes.Role, TrickingLibraryConstants.Roles.Mod);
+                });
+            });
+        }
+    }
+
+    public struct TrickingLibraryConstants
+    {
+        public struct Policies
+        {
+            public const string Mod = nameof(Mod);
+        }
+
+        public struct Roles
+        {
+            public const string Mod = nameof(Mod);
         }
     }
 }
