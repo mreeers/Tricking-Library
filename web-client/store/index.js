@@ -10,6 +10,9 @@ export const mutations = {
 
 export const actions = {
   nuxtServerInit({dispatch}){
-    return  dispatch("tricks/fetchTricks")
+    return dispatch("tricks/fetchTricks")
+  },
+  clientInit({dispatch}){
+    return  dispatch("auth/initialize")
   }
 };
