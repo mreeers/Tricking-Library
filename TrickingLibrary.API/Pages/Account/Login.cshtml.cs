@@ -11,7 +11,8 @@ namespace TrickingLibrary.API.Pages.Account
 {
     public class LoginModel : PageModel
     {
-        [BindProperty] public LoginForm Form { get; set; }
+        [BindProperty] 
+        public LoginForm Form { get; set; }
 
         public void OnGet(string returnUrl)
         {
