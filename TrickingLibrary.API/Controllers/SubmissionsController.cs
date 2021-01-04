@@ -33,9 +33,9 @@ namespace TrickingLibrary.API.Controllers
         
         [HttpPost]
         [Authorize(TrickingLibraryConstants.Policies.User)]
-        public async Task<IActionResult> Create([FromBody] SubmissionsForm submissionForm, [FromServices] Channel<EditVideoMessage> channel, [FromServices] VideoManager videoManager)
+        public async Task<IActionResult> Create([FromBody] SubmissionsForm submissionForm, [FromServices] Channel<EditVideoMessage> channel, [FromServices] IFileManager fileManagerLocal)
         {
-            if (!videoManager.TemporaryFileExists(submissionForm.Video))
+            if (!fileManagerLocal.TemporaryFileExists(submissionForm.Video))
             {
                 return BadRequest();
             }

@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
@@ -13,6 +12,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using TrickingLibrary.API.BackgroundServices;
@@ -24,11 +24,13 @@ namespace TrickingLibrary.API
     public class Startup
     {
         private readonly IWebHostEnvironment _env;
+        private readonly IConfiguration _configuration;
         private const string AllCors = "All";
 
-        public Startup(IWebHostEnvironment env)
+        public Startup(IWebHostEnvironment env, IConfiguration configuration)
         {
             _env = env;
+            _configuration = configuration;
         }
 
         public void ConfigureServices(IServiceCollection services)
@@ -43,7 +45,7 @@ namespace TrickingLibrary.API
 
             services.AddHostedService<VideoEditingBackgroundService>()
                 .AddSingleton(_ => Channel.CreateUnbounded<EditVideoMessage>())
-                .AddSingleton<VideoManager>()
+                .AddFileManager(_configuration)
                 .AddCors(options => options.AddPolicy(AllCors, build => build.AllowAnyHeader()
                     .AllowAnyOrigin()
                     .AllowAnyMethod()));
@@ -171,30 +173,6 @@ namespace TrickingLibrary.API
                     policy.RequireClaim(TrickingLibraryConstants.Claims.Role, TrickingLibraryConstants.Roles.Mod);
                 });
             });
-        }
-    }
-
-    public struct TrickingLibraryConstants
-    {
-        public struct Policies
-        {
-            public const string User = IdentityServerConstants.LocalApi.PolicyName;
-            public const string Mod = nameof(Mod);
-        }
-
-        public struct IdentityResources
-        {
-            public const string RoleScope = "role";
-        }
-
-        public struct Claims
-        {
-            public const string Role = "role";
-        }
-
-        public struct Roles
-        {
-            public const string Mod = nameof(Mod);
         }
     }
 }

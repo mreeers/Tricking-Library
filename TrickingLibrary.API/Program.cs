@@ -80,8 +80,8 @@ namespace TrickingLibrary.API
                         Description = "test descriptions",
                         Video = new Video
                         {
-                            VideoLink = "one.mp4",
-                            ThumbLink = "one.jpg"
+                            VideoLink = "https://localhost:5001/api/files/video/one.mp4",
+                            ThumbLink = "https://localhost:5001/api/files/image/one.jpg"
                         },
                         VideoProcessed = true,
                         UserId = testUser.Id
@@ -92,8 +92,8 @@ namespace TrickingLibrary.API
                         Description = "test descriptions 2",
                         Video = new Video
                         {
-                            VideoLink = "two.mp4",
-                            ThumbLink = "two.jpg"
+                            VideoLink = "https://localhost:5001/api/files/video/two.mp4",
+                            ThumbLink = "https://localhost:5001/api/files/image/two.jpg"
                         },
                         VideoProcessed = true,
                         UserId = testUser.Id

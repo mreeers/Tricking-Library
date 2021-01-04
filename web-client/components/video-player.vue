@@ -6,8 +6,8 @@
     <video
       ref="video"
        muted loop
-      :src="`http://localhost:5000/api/videos/${video.videoLink}`"
-      :poster="`http://localhost:5000/api/videos/${video.thumbLink}`"
+      :src="video.videoLink"
+      :poster="video.thumbLink"
       preload="none"
       playsinline
     ></video>

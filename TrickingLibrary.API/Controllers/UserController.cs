@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using TrickingLibrary.API.BackgroundServices.VideoEditing;
+using TrickingLibrary.API.Settings;
 using TrickingLibrary.Data;
 using TrickingLibrary.Models;
 
@@ -65,7 +66,7 @@ namespace TrickingLibrary.API.Controllers
         }
 
         [HttpPut("{id}/image")]
-        public async Task<IActionResult> UpdateProfileImage(IFormFile image, [FromServices] VideoManager videoManager)
+        public async Task<IActionResult> UpdateProfileImage(IFormFile image, [FromServices] IFileManager fileManager)
         {
             if (image == null)
                 return BadRequest();
@@ -76,9 +77,9 @@ namespace TrickingLibrary.API.Controllers
             if (user == null)
                 return NoContent();
 
-            var fileName = VideoManager.GenerateProfileFileName();
+            var fileName = TrickingLibraryConstants.Files.GenerateProfileFileName();
 
-            await using (var stream = System.IO.File.Create(videoManager.GetSavePath(fileName)))
+            await using (var stream = System.IO.File.Create(fileManager.GetSavePath(fileName)))
 
             using(var imageProcessor = await Image.LoadAsync(image.OpenReadStream()))
             {
@@ -87,7 +88,7 @@ namespace TrickingLibrary.API.Controllers
                 await imageProcessor.SaveAsync(stream, new JpegEncoder());
             }
 
-            user.Image = fileName;
+            user.Image = fileManager.GetFileUrl(fileName, FileType.Image);
 
             await _context.SaveChangesAsync();
 
