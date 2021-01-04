@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Channels;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using TrickingLibrary.API.BackgroundServices.VideoEditing;
@@ -12,9 +13,8 @@ using TrickingLibrary.Models;
 
 namespace TrickingLibrary.API.Controllers
 {
-    [ApiController]
     [Route("api/submissions")]
-    public class SubmissionsController : ControllerBase
+    public class SubmissionsController : ApiController
     {
         private readonly AppDbContext _context;
 
@@ -32,6 +32,7 @@ namespace TrickingLibrary.API.Controllers
         public Submission Get(int id) => _context.Submissions.FirstOrDefault(x => x.Id.Equals(id));
         
         [HttpPost]
+        [Authorize(TrickingLibraryConstants.Policies.User)]
         public async Task<IActionResult> Create([FromBody] SubmissionsForm submissionForm, [FromServices] Channel<EditVideoMessage> channel, [FromServices] VideoManager videoManager)
         {
             if (!videoManager.TemporaryFileExists(submissionForm.Video))
@@ -43,7 +44,8 @@ namespace TrickingLibrary.API.Controllers
             { 
                 TrickId = submissionForm.TrickId,
                 Description = submissionForm.Description,
-                VideoProcessed = false
+                VideoProcessed = false,
+                UserId = UserId
             };
             _context.Add(submission);
             await _context.SaveChangesAsync();

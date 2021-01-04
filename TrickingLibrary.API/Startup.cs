@@ -4,6 +4,7 @@ using System.Linq;
 using System.Security.Claims;
 using System.Threading.Channels;
 using System.Threading.Tasks;
+using IdentityModel;
 using IdentityServer4;
 using IdentityServer4.Models;
 using Microsoft.AspNetCore.Builder;
@@ -80,6 +81,8 @@ namespace TrickingLibrary.API
 
             services.AddIdentity<IdentityUser, IdentityRole>(options =>
             {
+                options.User.RequireUniqueEmail = true;
+
                 if (_env.IsDevelopment())
                 {
                     options.Password.RequireDigit = false;
@@ -117,7 +120,11 @@ namespace TrickingLibrary.API
 
                 identityServerBuilder.AddInMemoryApiScopes(new ApiScope[]
                 {
-                    new ApiScope(IdentityServerConstants.LocalApi.ScopeName, new[] {TrickingLibraryConstants.Claims.Role}),
+                    new ApiScope(IdentityServerConstants.LocalApi.ScopeName, new[] 
+                    {
+                        JwtClaimTypes.PreferredUserName,
+                        TrickingLibraryConstants.Claims.Role
+                    }),
                 });
 
                 identityServerBuilder.AddInMemoryClients(new Client[]
@@ -171,6 +178,7 @@ namespace TrickingLibrary.API
     {
         public struct Policies
         {
+            public const string User = IdentityServerConstants.LocalApi.PolicyName;
             public const string Mod = nameof(Mod);
         }
 
@@ -181,7 +189,7 @@ namespace TrickingLibrary.API
 
         public struct Claims
         {
-            public const string Role = nameof(Role);
+            public const string Role = "role";
         }
 
         public struct Roles

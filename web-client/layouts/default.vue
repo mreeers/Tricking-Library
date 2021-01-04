@@ -10,16 +10,31 @@
       </v-skeleton-loader>
 
       <v-skeleton-loader class="mx-1" :loading="loading" transition="fade-transition" type="button">
-        <v-btn depressed outlined v-if="authenticated">
-          <v-icon left>mdi-account-circle</v-icon>
-          Profile
-        </v-btn>
-        <v-btn outlined v-else @click="$auth.signinRedirect()">
+        <v-menu offset-y v-if="authenticated">
+          <template v-slot:activator="{on, attrs}">
+            <v-btn icon v-bind="attrs" v-on="on">
+              <v-icon>mdi-account-circle</v-icon>
+            </v-btn>
+          </template>
+          <v-list-item @click="$router.push('/profile')">
+            <v-list-item-title>
+              <v-icon left>mdi-account-circle</v-icon>
+              Profile
+            </v-list-item-title>
+          </v-list-item>
+
+          <v-list-item @click="$auth.signoutRedirect()">
+            <v-list-item-title >
+              <v-icon left>mdi-logout</v-icon>
+              Logout
+            </v-list-item-title>
+          </v-list-item>
+        </v-menu>
+        <v-btn depressed outlined v-else @click="$auth.signinRedirect()">
           <v-icon left>mdi-account-circle-outline</v-icon>
-          Sign In
+          Log In
         </v-btn>
       </v-skeleton-loader>
-      <v-btn v-if="authenticated" @click="$auth.signoutRedirect()" depressed>Logout</v-btn>
 
     </v-app-bar>
     <v-main>
