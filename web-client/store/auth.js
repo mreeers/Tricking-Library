@@ -1,4 +1,4 @@
-const initState = () => ({
+﻿const initState = () => ({
   user: null,
   profile: null,
   loading: true
@@ -39,7 +39,7 @@ export const actions = {
         if (user) {
           commit('saveUser', {user})
           this.$axios.setToken(`Bearer ${user.access_token}`)
-          const profile = this.$axios.get('/api/users/me')
+          const profile = await this.$axios.$get('/api/users/me')
           console.log("auth store profile", profile)
           commit('saveProfile', {profile})
         }
@@ -57,17 +57,16 @@ export const actions = {
     return new Promise((resolve, reject) => {
       if (state.loading) {
         console.log("start watched")
-        const unwath = this.watch(
+        const unwatch = this.watch(
           (s) => s.auth.loading,
           (n, o) => {
-            unwath();
+            unwatch();
             if(!getters.authenticated){
               this.$auth.signinRedirect()
             } else if(!n){
               console.log("user finish loading")
               resolve(action())
             }
-
           }
         )
       } else {

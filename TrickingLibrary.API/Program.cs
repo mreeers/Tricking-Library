@@ -30,10 +30,10 @@ namespace TrickingLibrary.API
                 if (env.IsDevelopment())
                 {
                     var userMgr = scope.ServiceProvider.GetRequiredService<UserManager<IdentityUser>>();
-                    var testUser = new IdentityUser("user") { Email = "test@test.com" };
-                    userMgr.CreateAsync(testUser, "user").GetAwaiter().GetResult();
+                    var testUser = new IdentityUser("test") { Email = "test@test.com" };
+                    userMgr.CreateAsync(testUser, "password").GetAwaiter().GetResult();
 
-                    var mod = new IdentityUser("mod") { Email = "mod@emai;.com" };
+                    var mod = new IdentityUser("mod") { Email = "mod@emai.com" };
                     userMgr.CreateAsync(mod, "password").GetAwaiter().GetResult();
                     userMgr.AddClaimAsync(mod, new Claim(TrickingLibraryConstants.Claims.Role, TrickingLibraryConstants.Roles.Mod))
                         .GetAwaiter()
@@ -104,8 +104,6 @@ namespace TrickingLibrary.API
                         Type = ModerationTypes.Trick
                     });
                     context.SaveChanges();
-
-                    
                 }
             }
 
