@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using TrickingLibrary.API.Form;
 using TrickingLibrary.API.ViewModels;
 using TrickingLibrary.Data;
 using TrickingLibrary.Models;
@@ -25,7 +26,9 @@ namespace TrickingLibrary.API.Controllers
         }
 
         [HttpGet]
-        public IEnumerable<ModerationItem> All() => _context.ModerationItems.ToList();
+        public IEnumerable<ModerationItem> All() => _context.ModerationItems
+            .Where(x => !x.Deleted)
+            .ToList();
 
         [HttpGet("{id}")]
         public ModerationItem Get(int id) => _context.ModerationItems.FirstOrDefault(x => x.Id.Equals(id));
@@ -69,18 +72,41 @@ namespace TrickingLibrary.API.Controllers
                 .ToList();
 
         [HttpPost("{id}/reviews")]
-        public async Task<IActionResult> Review(int id, [FromBody] Review review)
+        public async Task<IActionResult> Review(int id, [FromBody] ReviewForm reviewForm, [FromServices] VersionMigrationContext migrationContext)
         {
-            if (!_context.ModerationItems.Any(x => x.Id == id))
+            var modItem = _context.ModerationItems
+                .Include(x => x.Reviews)
+                .FirstOrDefault(x => x.Id == id);
+
+            if (modItem == null)
             {
                 return NoContent();
             }
 
-            review.ModerationItemId = id;
+            if (modItem.Deleted)
+            {
+                return BadRequest("Moderation item no longer exists.");
+            }
+
+            //TODO: make this async save
+            var review = new Review
+            {
+                ModerationItemId = id,
+                Status = reviewForm.Status,
+                Comment = reviewForm.Comment
+            };
+
+            //TODO: user configuration replace the magic '3'
+            if (modItem.Reviews.Count >= 3)
+            {
+                migrationContext.Migrate(modItem.Target, modItem.TargetVersion, modItem.Type);
+                modItem.Deleted = true;
+            }
+
             _context.Add(review);
             await _context.SaveChangesAsync();
-
-            return Ok(review);
+            
+            return Ok(ReviewViewModel.Create(review));
         }
     }
 }

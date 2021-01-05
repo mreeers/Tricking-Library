@@ -26,7 +26,7 @@ namespace TrickingLibrary.API.Controllers
 
         [HttpGet("{id}")]
         public Difficulty Get(string id) => 
-            _context.Difficulties.FirstOrDefault(x => x.Id.Equals(id, StringComparison.InvariantCultureIgnoreCase));
+            _context.Difficulties.FirstOrDefault(x => x.Slug.Equals(id, StringComparison.InvariantCultureIgnoreCase));
         
         [HttpGet("{id}/tricks")]
         public IEnumerable<Trick> ListdifficultyForTricks(string id) =>
@@ -37,7 +37,7 @@ namespace TrickingLibrary.API.Controllers
         [HttpPost]
         public async Task<Difficulty> Create([FromBody] Difficulty difficulty)
         {
-            difficulty.Id = difficulty.Name.Replace(" ", "-").ToLowerInvariant();
+            difficulty.Slug = difficulty.Name.Replace(" ", "-").ToLowerInvariant();
             _context.Add(difficulty);
             await _context.SaveChangesAsync();
             return difficulty;

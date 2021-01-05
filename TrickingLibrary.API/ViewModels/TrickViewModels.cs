@@ -14,12 +14,12 @@ namespace TrickingLibrary.API.ViewModels
         public static Expression<Func<Trick, object>> Projection =>
             trick => new
             {
-                trick.Id,
+                trick.Slug,
                 trick.Name,
                 trick.Description,
                 trick.Difficulty,
                 Categories = trick.TrickCategories.Select(x => x.CategoryId),
-                Prerequisites = trick.Prerequisite.Select(x => x.PrerequisiteId),
+                Prerequisites = trick.Prerequisites.Select(x => x.PrerequisiteId),
                 Progressions = trick.Progressions.Select(x => x.ProgressionId),
             };
     }

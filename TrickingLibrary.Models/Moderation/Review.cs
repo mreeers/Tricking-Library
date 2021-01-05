@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using TrickingLibrary.Models.Abstractions;
 
 namespace TrickingLibrary.Models.Moderation
 {
-    public class Review : BaseModel<int>
+    public class Review : TemporalModel
     {
+        public int Id { get; set; }
         public int ModerationItemId { get; set; }
         public ModerationItem ModerationItem { get; set; }
         public string Comment { get; set; }

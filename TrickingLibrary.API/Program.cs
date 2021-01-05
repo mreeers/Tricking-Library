@@ -39,36 +39,42 @@ namespace TrickingLibrary.API
                         .GetAwaiter()
                         .GetResult();
 
-                    context.Add(new Difficulty { Id = "easy", Name = "Easy", Description = "Easy test" });
-                    context.Add(new Difficulty { Id = "medium", Name = "Medium", Description = "medium test" });
-                    context.Add(new Difficulty { Id = "hard", Name = "Hard", Description = "Hard test" });
-                    context.Add(new Category { Id = "kick", Name = "Kick", Description = "Test" });
-                    context.Add(new Category { Id = "flip", Name = "Flip", Description = "Test" });
-                    context.Add(new Category { Id = "swim", Name = "Swim", Description = "Test" });
+                    context.Add(new Difficulty { Slug = "easy", Active = true, Version = 1, Name = "Easy", Description = "Easy test" });
+                    context.Add(new Difficulty { Slug = "medium", Active = true, Version = 1, Name = "Medium", Description = "medium test" });
+                    context.Add(new Difficulty { Slug = "hard", Active = true, Version = 1, Name = "Hard", Description = "Hard test" });
+                    context.Add(new Category { Slug = "kick", Active = true, Version = 1, Name = "Kick", Description = "Test" });
+                    context.Add(new Category { Slug = "flip", Active = true, Version = 1, Name = "Flip", Description = "Test" });
+                    context.Add(new Category { Slug = "swim", Active = true, Version = 1, Name = "Swim", Description = "Test" });
                     context.Add(new Trick
                     {
-                        Id = "backwards-roll",
+                        Slug = "backwards-roll",
                         Name = "Backwards Roll",
+                        Active = true,
+                        Version = 1,
                         Description = "This is Backwards Roll test",
                         Difficulty = "easy",
                         TrickCategories = new List<TrickCategory> {new TrickCategory{CategoryId = "flip"}}
                     });
                     context.Add(new Trick
                     {
-                        Id = "forwards-roll",
+                        Slug = "forwards-roll",
                         Name = "Forwards Roll",
+                        Active = true,
+                        Version = 1,
                         Description = "This is Forwards Roll test",
                         Difficulty = "easy",
                         TrickCategories = new List<TrickCategory> { new TrickCategory { CategoryId = "flip" } }
                     });
                     context.Add(new Trick
                     {
-                        Id = "back-flip",
+                        Slug = "back-flip",
                         Name = "Back Flip",
+                        Active = true,
+                        Version = 1,
                         Description = "This is Back Flip test",
                         Difficulty = "medium",
                         TrickCategories = new List<TrickCategory> { new TrickCategory { CategoryId = "flip" } },
-                        Prerequisite = new List<TrickRelationship> { new TrickRelationship 
+                        Prerequisites = new List<TrickRelationship> { new TrickRelationship 
                             { 
                                 PrerequisiteId = "backwards-roll"
                             } 

@@ -26,7 +26,7 @@ namespace TrickingLibrary.API.Controllers
 
         [HttpGet("{id}")]
         public Category Get(string id) => 
-            _context.Categories.FirstOrDefault(x => x.Id.Equals(id, StringComparison.InvariantCultureIgnoreCase));
+            _context.Categories.FirstOrDefault(x => x.Slug.Equals(id, StringComparison.InvariantCultureIgnoreCase));
         
         [HttpGet("{id}/tricks")]
         public IEnumerable<Trick> ListCategoryTricks(string id) =>
@@ -39,7 +39,7 @@ namespace TrickingLibrary.API.Controllers
         [HttpPost]
         public async Task<Category> Create([FromBody] Category category)
         {
-            category.Id = category.Name.Replace(" ", "-").ToLowerInvariant();
+            category.Slug = category.Name.Replace(" ", "-").ToLowerInvariant();
             _context.Add(category);
             await _context.SaveChangesAsync();
             return category;
