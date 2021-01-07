@@ -31,7 +31,12 @@ namespace TrickingLibrary.API.Controllers
             .ToList();
 
         [HttpGet("{id}")]
-        public ModerationItem Get(int id) => _context.ModerationItems.FirstOrDefault(x => x.Id.Equals(id));
+        public object Get(int id) => _context.ModerationItems
+            .Include(x => x.Comments)
+            .Include(x => x.Reviews)
+            .Where(x => x.Id.Equals(id))
+            .Select(ModerationItemViewModels.Projection)
+            .FirstOrDefault();
 
         [HttpGet("{id}/comments")]
         public IEnumerable<object> GetComments(int id) =>
@@ -97,11 +102,19 @@ namespace TrickingLibrary.API.Controllers
             };
 
             //TODO: user configuration replace the magic '3'
-            if (modItem.Reviews.Count >= 3)
+            try
             {
-                migrationContext.Migrate(modItem.Target, modItem.TargetVersion, modItem.Type);
-                modItem.Deleted = true;
+                if (modItem.Reviews.Count >= 3)
+                {
+                    migrationContext.Migrate(modItem);
+                    modItem.Deleted = true;
+                }
             }
+            catch (VersionMigrationContext.InvalidVersionException e)
+            {
+                return BadRequest(e.Message);
+            }
+            
 
             _context.Add(review);
             await _context.SaveChangesAsync();

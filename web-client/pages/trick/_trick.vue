@@ -9,7 +9,7 @@
       </div>
     </template>
 
-    <template v-slot:item>
+    <template v-slot:item="{close}">
       <div class="text-h5">
         <span>{{ trick.name }}</span>
         <v-chip class="mb-1 ml-2" small :to="`/difficulty/${difficulty.slug}`">
@@ -27,13 +27,18 @@
           </v-chip>
         </v-chip-group>
       </div>
+      <v-divider class="my-1"></v-divider>
+      <div>
+        <v-btn outlined small @click="edit(); close();">Edit</v-btn>
+      </div>
     </template>
   </item-content-layout>
 </template>
 
 <script>
-  import {mapState, mapGetters} from 'vuex';
+  import {mapState, mapGetters, mapMutations} from 'vuex';
   import VideoPlayer from "../../components/video-player";
+  import TrickSteps from "@/components/content-creation/trick-steps";
   import ItemContentLayout from "../../components/item-content-layout";
 
   export default {
@@ -42,6 +47,12 @@
       trick: null,
       difficulty: null
     }),
+    methods: {
+      ...mapMutations('video-upload', ['activate']),
+      edit() {
+        this.activate({component: TrickSteps, edit: true, editPayload: this.trick})
+      }
+    },
     computed: {
       ...mapState('submissions', ['submissions']),
       ...mapState('tricks', ['categories', 'tricks']),

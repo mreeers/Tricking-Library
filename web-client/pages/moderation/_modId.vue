@@ -21,9 +21,11 @@
             <div v-else>No Reviews</div>
             <v-divider class="my-3"></v-divider>
             <v-text-field v-model="reviewComment" label="Review Comment"></v-text-field>
-
           </v-card-text>
-          <v-card-actions class="justify-center">
+          <div v-if="outdated">
+            Outdate
+          </div>
+          <v-card-actions v-else class="justify-center">
             <v-btn v-for="action in reviewActions" :color="reviewStatusColor(action.status)" :key="`ra-${action.title}`"
                    :disabled="action.disabled" @click="createReview(action.status)">
               <v-icon>{{reviewStatusIcon(action.status)}}</v-icon>
@@ -44,11 +46,6 @@
   const endpointResolver = (type) => {
     if (type === 'trick') return 'tricks'
   };
-
-  const commentWithReplies = comment => ({
-    ...comment,
-    replies: []
-  });
 
   const REVIEW_STATUS = {
     APPROVED: 0,
@@ -73,23 +70,27 @@
   export default {
     components: {CommentSection},
     data: () => ({
+      current: null,
       item: null,
       comments: [],
       reviews: [],
       reviewComment: "",
       replyId: 0,
     }),
-    created() {
-      const {modId, type, trickId} = this.$route.params;
-      const endpoint = endpointResolver(type);
-      this.$axios.$get(`/api/${endpoint}/${trickId}`)
+    async created() {
+      const {modId} = this.$route.params;
+
+      const modItem = await this.$axios.$get(`/api/moderation-items/${modId}`);
+      this.comments = modItem.comments
+      this.reviews = modItem.reviews
+
+      const endpoint = endpointResolver(modItem.type);
+
+      this.$axios.$get(`/api/${endpoint}/${modItem.current}`)
+        .then((item) => this.current = item);
+
+      this.$axios.$get(`/api/${endpoint}/${modItem.target}`)
         .then((item) => this.item = item);
-
-      this.$axios.$get(`/api/moderation-items/${modId}/comments`)
-        .then((comments) => this.comments = comments);
-
-      this.$axios.$get(`/api/moderation-items/${modId}/reviews`)
-        .then((reviews) => this.reviews = reviews)
     },
     methods: {
       sendComment(content) {
@@ -120,6 +121,9 @@
       },
       approveCount() {
         return this.reviews.filter(x => x.status === REVIEW_STATUS.APPROVED).length
+      },
+      outdated(){
+        return this.currency && this.item && this.item.version - this.current.version <= 0
       }
     }
   }

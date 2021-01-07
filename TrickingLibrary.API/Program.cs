@@ -39,44 +39,47 @@ namespace TrickingLibrary.API
                         .GetAwaiter()
                         .GetResult();
 
-                    context.Add(new Difficulty { Slug = "easy", Active = true, Version = 1, Name = "Easy", Description = "Easy test" });
-                    context.Add(new Difficulty { Slug = "medium", Active = true, Version = 1, Name = "Medium", Description = "medium test" });
-                    context.Add(new Difficulty { Slug = "hard", Active = true, Version = 1, Name = "Hard", Description = "Hard test" });
-                    context.Add(new Category { Slug = "kick", Active = true, Version = 1, Name = "Kick", Description = "Test" });
-                    context.Add(new Category { Slug = "flip", Active = true, Version = 1, Name = "Flip", Description = "Test" });
-                    context.Add(new Category { Slug = "swim", Active = true, Version = 1, Name = "Swim", Description = "Test" });
+                    context.Add(new Difficulty { Id=1, Slug = "easy", Active = true, Version = 1, Name = "Easy", Description = "Easy test" });
+                    context.Add(new Difficulty { Id = 2, Slug = "medium", Active = true, Version = 1, Name = "Medium", Description = "medium test" });
+                    context.Add(new Difficulty { Id = 3, Slug = "hard", Active = true, Version = 1, Name = "Hard", Description = "Hard test" });
+                    context.Add(new Category { Id = 1, Slug = "kick", Active = true, Version = 1, Name = "Kick", Description = "Test" });
+                    context.Add(new Category { Id = 2, Slug = "flip", Active = true, Version = 1, Name = "Flip", Description = "Test" });
+                    context.Add(new Category { Id = 3, Slug = "swim", Active = true, Version = 1, Name = "Swim", Description = "Test" });
                     context.Add(new Trick
                     {
+                        Id = 1,
                         Slug = "backwards-roll",
                         Name = "Backwards Roll",
                         Active = true,
                         Version = 1,
                         Description = "This is Backwards Roll test",
                         Difficulty = "easy",
-                        TrickCategories = new List<TrickCategory> {new TrickCategory{CategoryId = "flip"}}
+                        TrickCategories = new List<TrickCategory> {new TrickCategory{CategoryId = 2}}
                     });
                     context.Add(new Trick
                     {
+                        Id = 2,
                         Slug = "forwards-roll",
                         Name = "Forwards Roll",
                         Active = true,
                         Version = 1,
                         Description = "This is Forwards Roll test",
                         Difficulty = "easy",
-                        TrickCategories = new List<TrickCategory> { new TrickCategory { CategoryId = "flip" } }
+                        TrickCategories = new List<TrickCategory> { new TrickCategory { CategoryId = 2 } }
                     });
                     context.Add(new Trick
                     {
+                        Id = 3,
                         Slug = "back-flip",
                         Name = "Back Flip",
                         Active = true,
                         Version = 1,
                         Description = "This is Back Flip test",
                         Difficulty = "medium",
-                        TrickCategories = new List<TrickCategory> { new TrickCategory { CategoryId = "flip" } },
+                        TrickCategories = new List<TrickCategory> { new TrickCategory { CategoryId = 2 } },
                         Prerequisites = new List<TrickRelationship> { new TrickRelationship 
                             { 
-                                PrerequisiteId = "backwards-roll"
+                                PrerequisiteId = 1
                             } 
                         }
                     });
@@ -106,7 +109,7 @@ namespace TrickingLibrary.API
                     });
                     context.Add(new ModerationItem 
                     {
-                        Target = "forwards-roll",
+                        Target = 3,
                         Type = ModerationTypes.Trick
                     });
                     context.SaveChanges();
